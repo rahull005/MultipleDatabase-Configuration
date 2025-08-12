@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Entity
-@Table(name = "multiple_users")
+@Table(name = "multidatabase_users")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

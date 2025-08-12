@@ -1,8 +1,6 @@
 package com.database.MultipleDatabaseConfig.config;
 
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.transaction.TransactionManager;
-import org.hibernate.annotations.ConcreteProxy;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +9,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
-
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,17 +20,22 @@ public class JpaConfig {
     @Primary
     public LocalContainerEntityManagerFactoryBean OracleEntityManagerFactory(
             EntityManagerFactoryBuilder builder,
-            @Qualifier("oracleDatasourceConfig")DataSource dataSource){
+            @Qualifier("oracleDatasourceConfig") DataSource dataSource) {
 
         Map<String, Object> jpaProperties = new HashMap<>();
         jpaProperties.put("hibernate.hbm2ddl.auto", "update");
-        jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
+        jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.OracleDialect");
         jpaProperties.put("hibernate.show_sql", true);
-        return builder.dataSource(dataSource)
+        jpaProperties.put("hibernate.format_sql", true);
+
+        return builder
+                .dataSource(dataSource)
                 .packages("com.database.MultipleDatabaseConfig.oracle.entity")
+                .persistenceUnit("college")
                 .properties(jpaProperties)
-                .persistenceUnit("oracle").build();
+                .build();
     }
+
 
 
     @Bean(name = "mysqlEntityManagerFactory")
@@ -49,7 +51,7 @@ public class JpaConfig {
         return builder.dataSource(dataSource)
                 .packages("com.database.MultipleDatabaseConfig.mysql.entity")
                 .properties(jpaProperties)
-                .persistenceUnit("mysql").build();
+                .persistenceUnit("user").build();
     }
 
     @Bean(name = "oracleTransactionManager")

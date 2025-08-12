@@ -2,6 +2,8 @@ package com.database.MultipleDatabaseConfig;
 
 import com.database.MultipleDatabaseConfig.mysql.entity.User;
 import com.database.MultipleDatabaseConfig.mysql.repository.UserRepo;
+import com.database.MultipleDatabaseConfig.oracle.entity.College;
+import com.database.MultipleDatabaseConfig.oracle.repository.CollegeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +14,9 @@ public class MultipleDatabaseConfigApplication implements CommandLineRunner {
 
 	@Autowired
 	UserRepo userRepo;
+
+	@Autowired
+	CollegeRepo collegeRepo;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MultipleDatabaseConfigApplication.class, args);
@@ -25,7 +30,16 @@ public class MultipleDatabaseConfigApplication implements CommandLineRunner {
 				.password("rahul")
 				.build();
 
-		User save = userRepo.save(admin);
+		User usersave = userRepo.save(admin);
 		System.out.println("User saved with username :"+admin.getUsername());
+
+
+	//College
+		College college = College.builder()
+				.collegeName("MLRIT")
+				.city("Hyderabad")
+				.build();
+		College collegesave = collegeRepo.save(college);
+		System.out.println("The college is :"+collegesave.getCollegeName());
 	}
 }
